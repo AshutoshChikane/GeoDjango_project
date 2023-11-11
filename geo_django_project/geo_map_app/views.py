@@ -38,6 +38,5 @@ class MapView(View):
         if response.status_code == 200:
             response = response.json().get("properties",None)
             if response is not None:
-                print("response")
                 return response
         return None
