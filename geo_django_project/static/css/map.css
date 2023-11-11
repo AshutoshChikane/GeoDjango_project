@@ -1,8 +1,27 @@
 #map{
     height: 80vh;
-    width:1000px
+    width: 80%;
+    border: 2px solid white;
+    display: block;
+    margin: 20px auto;
     }
 
 h1 {
-  color: red;
+  color: white;
+  text-align: center;
+  margin: 1px;
+  text-decoration: underline;
+  text-decoration-color: white;
+}
+
+body{
+    background-color: #212529;
+}
+
+#navbar-border{
+    padding:2px;
+}
+
+.custom-nav{
+    padding:2px;
 }
