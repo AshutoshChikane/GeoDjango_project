@@ -16,7 +16,7 @@ class MapView(View):
         return render(request, "map.html", {"city_coordinates": city})
 
     def update_data_point(self):
-        location = Location.objects.filter(Q(temperature_url="") and Q(city=""))
+        location = Location.objects.filter(Q(temperature_url="") | Q(city=""))
         for item in location:
             response = self.fetch_data_national_weather_service(item.point.x, item.point.y)
             if response is not None:

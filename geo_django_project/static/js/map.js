@@ -13,16 +13,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 var temperature = await fetchData(city_data["temperature_url"]);
-                const city_property =  temperature.properties.periods[0];
-                console.log(city_property);
+                if (temperature !== false){
+                    const city_property =  temperature.properties.periods[0];
 
-                var marker = L.marker(city_data["lat_lng"]).addTo(map);
+                    var marker = L.marker(city_data["lat_lng"]).addTo(map);
 
-                var popupContent = '<b>id:</b>' + city_unique_id +
-                    '<br><b>Name:</b>' + city_data["city"] +
-                    '<br><b>Temperature:</b>' + city_property["temperature"] +
-                    '<br><b>Humidity:</b>' + city_property["relativeHumidity"]["value"] ;
-                marker.bindPopup(popupContent);
+                    var popupContent = '<b>id:</b>' + city_unique_id +
+                        '<br><b>Name:</b>' + city_data["city"] +
+                        '<br><b>Temperature:</b>' + city_property["temperature"] +
+                        '<br><b>Humidity:</b>' + city_property["relativeHumidity"]["value"] ;
+                    marker.bindPopup(popupContent);
+                };
             } catch (error) {
                 console.error('Error fetching temperature data for city '+city_data["city"]+':', error);
             }
@@ -33,22 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchData(url) {
-  // Define the API URL
   const apiUrl = url;
-
-  // Make a GET request to the API
   return fetch(apiUrl)
     .then(response => {
-      // Check if the response status is OK (200)
       if (!response.ok) {
-        throw new Error('HTTP error! Status: ${response.status}');
+        return false
       }
-
-      // Parse the JSON response
       return response.json();
     })
     .catch(error => {
-        console.log(response)
-        console.error('Error fetching temperature data for city', error);
+      throw error;
     });
 }

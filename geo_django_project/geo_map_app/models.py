@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
 
 class Location(models.Model):
-    city = models.CharField(max_length=300,blank=True,default="")
+    city = models.CharField(max_length=300, blank=True, default="")
     temperature_url = models.URLField(default="", blank=True)
     point = PointField(unique=True)
 
