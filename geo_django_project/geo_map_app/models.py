@@ -35,8 +35,14 @@ class Location(models.Model):
                     self.gridy = int(gridy)
                 if self.gridId == "":
                     self.gridId = gridId
-        super().save(*args, **kwargs)
-        print("Object saved! Additional logic executed.")
+                super().save(*args, **kwargs)
+                return True
+            elif self.pk is not None:
+                self.__class__.objects.filter(pk=self.pk).delete()
+                return None
+        elif self.pk is not None:
+            self.__class__.objects.filter(pk=self.pk).delete()
+            return None
 
     @property
     def lat_lng_data(self):
