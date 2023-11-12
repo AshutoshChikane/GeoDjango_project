@@ -4,4 +4,4 @@ from geo_map_app.models import Location
 class MapSerializer(serializers.Serializer):
     class Meta:
         model = Location
-        fields = '__all__'
+        fields = 'point'
