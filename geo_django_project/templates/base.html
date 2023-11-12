@@ -25,10 +25,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Add Location</a>
-        <a class="nav-link" href="#">Update Location</a>
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'map_view' %}">Home</a>
+        <a class="nav-link" href="{% url 'map_view' %}">Add Location</a>
+        <a class="nav-link" href="{% url 'map_view' %}">Update Location</a>
+        <a class="nav-link disabled" href="{% url 'map_view' %}" tabindex="-1" aria-disabled="true">Delete Location</a>
       </div>
     </div>
   </div>
