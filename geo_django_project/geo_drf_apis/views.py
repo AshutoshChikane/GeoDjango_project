@@ -5,7 +5,6 @@ from geo_map_app.models import Location
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
 
 
 class AddPointView(APIView):
