@@ -8,4 +8,4 @@ class LocationAdmin(OSMGeoAdmin):
     default_lat = 4411618
     default_lon = -10940608
     default_zoom = 4
-    list_display = ('id', 'city', 'temperature_url',)
+    list_display = ('id', 'city', "gridx", "gridy", "gridId")

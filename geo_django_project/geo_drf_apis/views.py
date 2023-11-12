@@ -12,8 +12,6 @@ class AddPointView(APIView):
         serializers_data = serializers.MapSerializer(data=request.data)
         if serializers_data.is_valid():
             new_instance = Location(
-                city=request.data["city"],
-                temperature_url=request.data["temperature_url"],
                 point=Point(x=request.data["point"]["x"], y=request.data["point"]["y"])
             )
             new_instance.save()

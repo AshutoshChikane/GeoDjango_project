@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 marker.on('click', async function (e) {
                     try {
-                        var temperature = await fetchData(city_data["temperature_url"]);
+                        var temperature = await fetchData(city_data);
                         if (temperature !== false) {
                             const city_property = temperature.properties.periods[0];
 
@@ -38,8 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
     addMarkers();
 });
 
-function fetchData(url) {
-    const apiUrl = url;
+function fetchData(city_data) {
+    const baseUrl = "https://api.weather.gov/gridpoints";
+    const apiUrl = `${baseUrl}/${city_data["gridId"]}/${city_data["gridX"]},${city_data["gridY"]}/forecast`;
     return fetch(apiUrl)
         .then(response => {
             if (!response.ok) {
