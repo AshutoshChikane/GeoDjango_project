@@ -4,35 +4,44 @@ from rest_framework import status
 from geo_map_app.models import Location
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
+from django.db import IntegrityError as DjIntegrityError
+from django.db import transaction
+from psycopg2.errors import UniqueViolation
+from psycopg2 import IntegrityError
 
 
 class AddPointView(APIView):
+    @transaction.atomic
     def post(self, request):
         try:
             latitude = request.data.get("latitude", None)
             longitude = request.data.get("longitude", None)
             if longitude is not None and latitude is not None:
-                try:
-                    new_instance = Location(
-                        point=Point(x=latitude, y=longitude)
-                    )
-                    response = new_instance.save()
-                    if response == True:
-                        response_data = {'detail': "Location created successfully"}
-                        return Response(response_data, status.HTTP_200_OK)
-                    else:
-                        response_data = {'detail': "We only present data for united nations"}
-                        return Response(response_data, status.HTTP_400_BAD_REQUEST)
-                except IntegrityError:
-                    response_data = {'detail': "Location already exist"}
+
+                new_instance = Location(
+                    point=Point(x=latitude, y=longitude)
+                )
+                response = new_instance.save()
+                if response == True:
+                    response_data = {'detail': "Location created successfully"}
+                    return Response(response_data, status.HTTP_200_OK)
+                else:
+                    response_data = {'detail': "We only present data for united nations"}
                     return Response(response_data, status.HTTP_400_BAD_REQUEST)
             else:
                 response_data = {'detail': "Enter Proper Coordinates"}
                 return Response(response_data, status.HTTP_400_BAD_REQUEST)
-
+        except IntegrityError:
+            response_data = {'detail': "Location already exist"}
+            return Response(response_data, status.HTTP_400_BAD_REQUEST)
+        except DjIntegrityError:
+            response_data = {'detail': "Location already exist"}
+            return Response(response_data, status.HTTP_400_BAD_REQUEST)
+        except UniqueViolation:
+            response_data = {'detail': "Location already exist"}
+            return Response(response_data, status.HTTP_400_BAD_REQUEST)
         except Exception as exp:
-            print(exp)
+            print(type(exp))
             response_data = {'detail': "internal server error"}
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
