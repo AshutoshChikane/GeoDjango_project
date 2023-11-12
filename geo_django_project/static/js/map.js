@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var map = L.map('map').setView([40.09, -100.09], 4.5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+        attribution: '© united states ONLY'
     }).addTo(map);
     var citiesCoordinates = JSON.parse(document.getElementById('cities-coordinates').textContent);
 

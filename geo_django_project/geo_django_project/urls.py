@@ -21,5 +21,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('geo_django_map/', include("geo_map_app.urls"))
+    path('geo_django_map/', include("geo_map_app.urls")),
+    path('geo_django_drf/', include("geo_drf_apis.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
