@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block script_data %}
-<script src="{% static 'js/map.js'%}"></script>
+<script src="{% static 'js/edit_map.js'%}"></script>
 {% endblock %}
 {% block content %}
-<div id="map">
+<div class="container">
+    <div id="edit_map">
     {{ city_coordinates|json_script:"cities-coordinates" }}
+    </div>
+    <div>
+    </div>
 </div>
 {% endblock %}

@@ -1,5 +1,5 @@
 #map{
-    height: 80vh;
+    height: 70vh;
     width: 80%;
     border: 2px solid white;
     display: block;
@@ -24,4 +24,28 @@ body{
 
 .custom-nav{
     padding:2px;
+}
+
+.navbar-brand{
+    font-size: 2.25rem;
+}
+
+
+#edit_map{
+    height: 70vh;
+    width: 60%;
+    border: 2px solid white;
+    margin: 10px 30px;
+}
+
+#add_map{
+    height: 70vh;
+    width: 60%;
+    border: 2px solid white;
+    margin: 10px 30px;
+}
+#delete_map{
+    height: 70vh;
+    width: 100%;
+    border: 2px solid white;
 }

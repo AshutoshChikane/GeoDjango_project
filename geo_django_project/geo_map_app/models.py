@@ -6,7 +6,8 @@ import requests
 
 
 class Migration(migrations.Migration):
-    dependencies = ["Location", "0001_initial"]
+    dependencies = []
+    # dependencies = ["Location", "0001_initial"]
     operations = [
         operations.CreateExtension('postgis')
     ]
@@ -18,6 +19,9 @@ class Location(models.Model):
     gridx = models.IntegerField(default=0)
     gridy = models.IntegerField(default=0)
     gridId = models.CharField(default="", blank=True, max_length=10)
+
+    class Meta:
+        app_label = 'geo_map_app'
 
     def save(self, *args, **kwargs):
         response = fetch_data_national_weather_service(self.point.x,self.point.y)
@@ -36,10 +40,8 @@ class Location(models.Model):
                 if self.gridId == "":
                     self.gridId = gridId
                 super().save(*args, **kwargs)
-            elif self.pk is not None:
-                self.__class__.objects.filter(pk=self.pk).delete()
-        elif self.pk is not None:
-            self.__class__.objects.filter(pk=self.pk).delete()
+        # elif self.pk is not None:
+        #     self.__class__.objects.filter(pk=self.pk).delete()
 
     @property
     def lat_lng_data(self):

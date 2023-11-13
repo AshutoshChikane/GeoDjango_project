@@ -12,23 +12,24 @@
     <link rel="stylesheet" href="{% static 'css/map.css' %}">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="{% static 'js/map.js'%}"></script>
+    {% block script_data %}{% endblock %}
+
 </head>
 <body>
 <h1>National Weather Services</h1>
 <div id="navbar-border">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark custom-nav">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">NWS</a>
+    <a class="navbar-brand" href="{% url 'map_view' %}">NWS</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="{% url 'map_view' %}">Home</a>
-        <a class="nav-link" href="{% url 'map_view' %}">Add Location</a>
-        <a class="nav-link" href="{% url 'map_view' %}">Update Location</a>
-        <a class="nav-link disabled" href="{% url 'map_view' %}" tabindex="-1" aria-disabled="true">Delete Location</a>
+        <a class="nav-link {% if template_name == 'map.html' %} active {% endif %}" aria-current="page" href="{% url 'map_view' %}">Home</a>
+        <a class="nav-link {% if template_name == 'add_map.html' %} active {% endif %}" href="{% url 'add_point_map_view' %}">Add-Location</a>
+        <a class="nav-link {% if template_name == 'update_map.html' %} active {% endif %}" href="{% url 'update_point_map_view' %}">Update-Location</a>
+        <a class="nav-link {% if template_name == 'delete_map.html' %} active {% endif %}" href="{% url 'delete_point_map_view' %}">Delete-Location</a>
       </div>
     </div>
   </div>

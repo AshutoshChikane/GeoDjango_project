@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var map = L.map('map').setView([40.09, -100.09], 4.5);
+    var map = L.map('add_map').setView([40.09, -100.09], 4.5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© united states ONLY'
