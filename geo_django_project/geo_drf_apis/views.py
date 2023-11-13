@@ -8,6 +8,7 @@ from django.db import IntegrityError as DjIntegrityError
 from django.db import transaction
 from psycopg2.errors import UniqueViolation
 from psycopg2 import IntegrityError
+import requests
 
 
 class AddPointView(APIView):
@@ -17,32 +18,32 @@ class AddPointView(APIView):
             latitude = request.data.get("latitude", None)
             longitude = request.data.get("longitude", None)
             if longitude is not None and latitude is not None:
-
-                new_instance = Location(
-                    point=Point(x=latitude, y=longitude)
-                )
-                response = new_instance.save()
-                if response == True:
+                latitude = float(latitude)
+                longitude = float(longitude)
+                url = f"https://api.weather.gov/points/{longitude},{latitude}"
+                response_url = requests.get(url)
+                if response_url.status_code == 200:
+                    new_instance = Location(
+                        point=Point(x=latitude, y=longitude)
+                    )
+                    new_instance.save()
                     response_data = {'detail': "Location created successfully"}
                     return Response(response_data, status.HTTP_200_OK)
+                elif response_url.status_code == 404:
+                    response_data = {'detail': "We only present data for united states"}
+                    return Response(response_data, status.HTTP_404_NOT_FOUND)
                 else:
-                    response_data = {'detail': "We only present data for united nations"}
+                    response_data = {'detail': "coordinate provided does not appear to be a valid coordinate"}
                     return Response(response_data, status.HTTP_400_BAD_REQUEST)
             else:
                 response_data = {'detail': "Enter Proper Coordinates"}
                 return Response(response_data, status.HTTP_400_BAD_REQUEST)
-        except IntegrityError:
-            response_data = {'detail': "Location already exist"}
+        except (IntegrityError, DjIntegrityError, UniqueViolation) as e:
+            response_data = {f'detail-{type(e)}': "Location already exist"}
             return Response(response_data, status.HTTP_400_BAD_REQUEST)
-        except DjIntegrityError:
-            response_data = {'detail': "Location already exist"}
-            return Response(response_data, status.HTTP_400_BAD_REQUEST)
-        except UniqueViolation:
-            response_data = {'detail': "Location already exist"}
-            return Response(response_data, status.HTTP_400_BAD_REQUEST)
+
         except Exception as exp:
-            print(type(exp))
-            response_data = {'detail': "internal server error"}
+            response_data = {'detail': "Internal server error"}
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

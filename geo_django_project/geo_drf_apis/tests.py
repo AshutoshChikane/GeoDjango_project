@@ -3,6 +3,9 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from geo_map_app.models import Location
 from django.contrib.gis.geos import Point
+from django.urls import reverse
+import unittest.mock
+
 
 class AddPointViewTest(TestCase):
     def setUp(self):
@@ -31,22 +34,51 @@ class AddPointViewTest(TestCase):
         self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Location.objects.count(), 1)
 
-# class DeletePointViewTest(TestCase):
-#     def setUp(self):
-#         self.client = APIClient()
-#         self.location = Location.objects.create(point='POINT(30,40)')
-#
-#     def test_delete_point_view(self):
-#         response = self.client.delete(f'/delete-point/{self.location.id}/')
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(Location.objects.count(), 0)
-#
-#     def test_delete_point_view_nonexistent_id(self):
-#         response = self.client.delete('/delete-point/999/')
-#
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Location.objects.count(), 1)
+    def test_add_point_view_out_of_united_state_location(self):
+        data = {'latitude': -97.0, 'longitude': 1}
+        response = self.client.post('/geo_django_drf/add-point/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Location.objects.count(), 0)
+
+    def test_add_point_view_wrong_invalid_location(self):
+        data = {'latitude': -97.0, 'longitude': 1111}
+        response = self.client.post('/geo_django_drf/add-point/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Location.objects.count(), 0)
+
+    def test_add_point_view_add_sting_co_ordinate(self):
+        data = {'latitude': -97.0, 'longitude': "abc"}
+        response = self.client.post('/geo_django_drf/add-point/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(Location.objects.count(), 0)
+
+
+class DeletePointViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.location = Location(point=Point(x=-101, y=40))
+        self.location.save()
+
+    def test_delete_point_view(self):
+        response = self.client.delete(f'/geo_django_drf/delete-point/{self.location.id}/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Location.objects.count(), 0)
+
+    def test_delete_point_view_nonexistent_id(self):
+        response = self.client.delete('/geo_django_drf/delete-point/999/')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Location.objects.count(), 1)
+
+    def test_delete_point_internal_server_error(self):
+        with unittest.mock.patch.object(Location, 'delete',
+                                        side_effect=Exception('Simulated Internal Server Error')):
+            url = reverse('delete-point', kwargs={'id': self.location.id})
+            response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 #
 # class UpdatePointViewTest(TestCase):
 #     def setUp(self):

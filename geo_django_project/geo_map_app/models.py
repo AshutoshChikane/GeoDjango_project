@@ -36,13 +36,10 @@ class Location(models.Model):
                 if self.gridId == "":
                     self.gridId = gridId
                 super().save(*args, **kwargs)
-                return True
             elif self.pk is not None:
                 self.__class__.objects.filter(pk=self.pk).delete()
-                return None
         elif self.pk is not None:
             self.__class__.objects.filter(pk=self.pk).delete()
-            return None
 
     @property
     def lat_lng_data(self):
@@ -60,8 +57,8 @@ class Location(models.Model):
             return None
 
 
-def fetch_data_national_weather_service(longitude, latitude):
-    url = f"https://api.weather.gov/points/{latitude},{longitude}"
+def fetch_data_national_weather_service(latitude, longitude):
+    url = f"https://api.weather.gov/points/{longitude},{latitude}"
     response = requests.get(url)
     if response.status_code == 200:
         response = response.json().get("properties",None)
