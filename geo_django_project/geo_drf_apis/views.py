@@ -70,21 +70,35 @@ class UpdatePointView(APIView):
         try:
             latitude = request.data.get("latitude", None)
             longitude = request.data.get("longitude", None)
-            if latitude is not  None and longitude is not None:
-                instance = Location.objects.get(id=id)
-                instance.point.x = latitude
-                instance.point.y = longitude
-                instance.city = ""
-                instance.gridx = 0
-                instance.gridy = 0
-                instance.gridId = ""
-                instance.save()
-                response_data = {'detail': f"object ID: {id} updated successfully"}
-                return Response(response_data, status.HTTP_200_OK)
+
+            if latitude is not None and longitude is not None:
+                latitude = float(latitude)
+                longitude = float(longitude)
+                url = f"https://api.weather.gov/points/{longitude},{latitude}"
+                response_url = requests.get(url)
+                if response_url.status_code == 200:
+                    instance = Location.objects.get(id=id)
+                    instance.point.x = latitude
+                    instance.point.y = longitude
+                    instance.city = ""
+                    instance.gridx = 0
+                    instance.gridy = 0
+                    instance.gridId = ""
+                    instance.save()
+                    response_data = {'detail': f"object ID: {id} updated successfully"}
+                    return Response(response_data, status.HTTP_200_OK)
+                elif response_url.status_code == 404:
+                    response_data = {'detail': "We only present data for united states"}
+                    return Response(response_data, status.HTTP_404_NOT_FOUND)
+                else:
+                    response_data = {'detail': "coordinate provided does not appear to be a valid coordinate"}
+                    return Response(response_data, status.HTTP_400_BAD_REQUEST)
             else:
                 response_data = {'detail': "Enter Proper Coordinates"}
                 return Response(response_data, status.HTTP_400_BAD_REQUEST)
-
+        except ObjectDoesNotExist:
+            response_data = {'detail': f"Location ID: {id} does not exist"}
+            return Response(response_data, status.HTTP_400_BAD_REQUEST)
         except Exception as exp:
             print(exp)
             response_data = {'detail': "internal server error"}
