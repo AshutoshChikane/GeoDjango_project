@@ -72,7 +72,6 @@ function fetchData(city_data) {
 }
 
 function editCity(latitude,longitude,city_id) {
-    // Function to get the CSRF token from cookies
     function getCSRFToken() {
         const cookieValue = document.cookie
             .split('; ')
@@ -151,7 +150,6 @@ function createForm(latitude, longitude, city_id) {
     latitudeCol.appendChild(latitudeLabel);
     latitudeCol.appendChild(latitudeInput);
 
-    // Longitude Input
     var longitudeCol = document.createElement('div');
     longitudeCol.classList.add('col-md-12', 'mb-4');
 

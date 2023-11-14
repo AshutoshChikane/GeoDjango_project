@@ -124,7 +124,6 @@ function fetchData(city_data) {
 }
 
 function deleteCity(city_data, city_unique_id) {
-    // Function to get the CSRF token from cookies
     function getCSRFToken() {
         const cookieValue = document.cookie
             .split('; ')
@@ -133,12 +132,10 @@ function deleteCity(city_data, city_unique_id) {
         return cookieValue;
     }
 
-    // Get the CSRF token
     const csrfToken = getCSRFToken();
 
     var raw = "";
 
-    // Include the CSRF token in the headers only if it's available
     var requestOptions = {
         method: 'DELETE',
         headers: {
@@ -148,7 +145,6 @@ function deleteCity(city_data, city_unique_id) {
         redirect: 'follow'
     };
 
-    // Add the CSRF token to headers if available
     if (csrfToken) {
         requestOptions.headers['X-CSRFToken'] = csrfToken;
     }
