@@ -22,6 +22,9 @@ class MapViewTest(TestCase):
     def test_get_update_view(self):
         response = self.client.get('/geo_django_map/update-point')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_get_update_city_view(self):
+        response = self.client.get(f'/geo_django_map/update-point/{self.location.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_delete_view(self):
         response = self.client.get('/geo_django_map/delete-point')

@@ -30,6 +30,13 @@ class UpdatePointMapView(View):
         template_name = "update_map.html"
         return render(request, template_name, {"city_coordinates": city, "template_name": template_name})
 
+class UpdateCityPointMapView(View):
+    def get(self, request, id):
+        location = Location.objects.get(id=id)
+        city = [location.lat_lng_data]
+        template_name = "update_city.html"
+        return render(request, template_name, {"city_coordinates": city, "template_name": template_name})
+
 
 class DeletePointMapView(View):
     def get(self, request):
