@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formRow.classList.add('form-row');
 
         var cityCol = document.createElement('div');
-        cityCol.classList.add('col-md-8', 'mb-1');
+        cityCol.classList.add('col-md-12', 'mb-1');
 
         var cityLabel = document.createElement('label');
         cityLabel.setAttribute('for', 'city');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cityCol.appendChild(cityInput);
 
         var idCol = document.createElement('div');
-        idCol.classList.add('col-md-8', 'mb-4');
+        idCol.classList.add('col-md-12', 'mb-4');
 
         var idLabel = document.createElement('label');
         idLabel.setAttribute('for', 'id');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         idCol.appendChild(idInput);
 
         var deleteCol = document.createElement('div');
-        deleteCol.classList.add('col-md-8', 'mb-2');
+        deleteCol.classList.add('col-md-12', 'mb-2');
 
         var deleteButton = document.createElement('button');
         deleteButton.type = 'button';

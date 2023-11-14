@@ -12,7 +12,7 @@ class AddPointViewTest(TestCase):
         self.client = APIClient()
 
     def test_add_point_view(self):
-        data = {'latitude': -97.0, 'longitude': 39.7456}
+        data = {'longitude': -97.0, 'latitude': 39.7456}
         response = self.client.post('/geo_django_drf/add-point/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Location.objects.count(), 1)
@@ -25,7 +25,7 @@ class AddPointViewTest(TestCase):
         self.assertEqual(Location.objects.count(), 0)
 
     def test_add_point_view_existing_location(self):
-        data = {'latitude': -97.0, 'longitude': 39.7456}
+        data = {'longitude': -97.0, 'latitude': 39.7456}
         response1 = self.client.post('/geo_django_drf/add-point/', data, format='json')
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
         response2 = self.client.post('/geo_django_drf/add-point/', data, format='json')
@@ -33,7 +33,7 @@ class AddPointViewTest(TestCase):
         self.assertEqual(Location.objects.count(), 1)
 
     def test_add_point_view_out_of_united_state_location(self):
-        data = {'latitude': -97.0, 'longitude': 1}
+        data = {'longitude': -97.0, 'latitude': 1}
         response = self.client.post('/geo_django_drf/add-point/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(Location.objects.count(), 0)
@@ -84,7 +84,7 @@ class UpdatePointViewTest(TestCase):
         self.location.save()
 
     def test_update_point_view(self):
-        data = {'latitude': -97.0, 'longitude': 39.7456}
+        data = {'longitude': -97.0, 'latitude': 39.7456}
         response = self.client.put(f'/geo_django_drf/update-point/{self.location.id}/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.location.refresh_from_db()
@@ -115,19 +115,19 @@ class UpdatePointViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_point_view_out_of_united_state_location(self):
-        data = {'latitude': -97.0, 'longitude': 1}
+        data = {'longitude': -97.0, 'latitude': 1}
         response = self.client.put(f'/geo_django_drf/update-point/{self.location.id}/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(Location.objects.count(), 1)
 
     def test_update_point_view_wrong_invalid_location(self):
-        data = {'latitude': -97.0, 'longitude': 1111}
+        data = {'longitude': -97.0, 'latitude': 1111}
         response = self.client.put(f'/geo_django_drf/update-point/{self.location.id}/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Location.objects.count(), 1)
 
     def test_update_point_view_wrong_id(self):
-        data = {'latitude': -97.0, 'longitude': 39.7456}
+        data = {'longitude': -97.0, 'latitude': 39.7456}
         self.assertEqual(Location.objects.count(), 1)
         response = self.client.put(f'/geo_django_drf/update-point/2/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

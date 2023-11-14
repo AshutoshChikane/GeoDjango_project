@@ -5,10 +5,17 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <div id="edit_map">
-    {{ city_coordinates|json_script:"cities-coordinates" }}
+    <div class="row">
+        <div class="col-md-9">
+            <div id="edit_map" >
+            {{ city_coordinates|json_script:"cities-coordinates" }}
+        </div>
+        </div>
+
+        <div id="city-form-container" class="col-md-3">
+        </div>
     </div>
-    <div>
-    </div>
+
 </div>
+
 {% endblock %}

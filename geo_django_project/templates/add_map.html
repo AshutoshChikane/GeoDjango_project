@@ -5,12 +5,18 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <div id="add_map" class="">
-    {{ city_coordinates|json_script:"cities-coordinates" }}
-    </div>
-    <div>
-    </div>
-</div>
+    <div class="row">
+        <div class="col-md-9">
+            <div id="add_map" >
+            {{ city_coordinates|json_script:"cities-coordinates" }}
+        </div>
+        </div>
 
+        <div id="city-form-container" class="col-md-3">
+            <h3>Click on the United State Map and Add Markers</h3>
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
