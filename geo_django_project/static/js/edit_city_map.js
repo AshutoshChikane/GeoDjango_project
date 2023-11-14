@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var map = L.map('add_map').setView([40.09, -100.09], 4.5);
+    var map = L.map('edit_map').setView([40.09, -100.09], 4.5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© united states ONLY'
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })(city_data, city_unique_id);
         }
     }
-
+    var city_id = Object.keys(citiesCoordinates[0])[0]
     addMarkers();
     var currentMarker = null;
     function onMapClick(e) {
@@ -47,10 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
     currentMarker = L.marker([lat,lng]).addTo(map);
-    createForm(lat, lng);
+    console.log(city_id)
+    createForm(lat, lng, city_id);
 
     }
-    map.on('click', onMapClick);
+    map.on('click', function(e) {
+    onMapClick(e, city_id);
+    });
     });
 
 function fetchData(city_data) {
@@ -68,7 +71,7 @@ function fetchData(city_data) {
         });
 }
 
-function addCity(latitude,longitude) {
+function editCity(latitude,longitude,city_id) {
     function getCSRFToken() {
         const cookieValue = document.cookie
             .split('; ')
@@ -85,7 +88,7 @@ function addCity(latitude,longitude) {
     });
 
     var requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -97,11 +100,11 @@ function addCity(latitude,longitude) {
         requestOptions.headers['X-CSRFToken'] = csrfToken;
     }
 
-    fetch(`http://127.0.0.1:8000/geo_django_drf/add-point/`, requestOptions)
+    fetch(`http://127.0.0.1:8000/geo_django_drf/update-point/${city_id}/`, requestOptions)
         .then(response => {
             if (response.ok) {
                 window.location.href = "/geo_django_map";
-                alert("added location successfully")
+                alert("updated location successfully")
             } else {
                 throw new Error(`HTTP error! Status: ${response.text}`);
             }
@@ -117,7 +120,7 @@ function addCity(latitude,longitude) {
 }
 
 
-function createForm(latitude, longitude) {
+function createForm(latitude, longitude, city_id) {
     var formContainer = document.getElementById('city-form-container');
     formContainer.innerHTML = '';
 
@@ -128,6 +131,7 @@ function createForm(latitude, longitude) {
     var formRow = document.createElement('div');
     formRow.classList.add('form-row');
 
+    // Latitude Input
     var latitudeCol = document.createElement('div');
     latitudeCol.classList.add('col-md-12', 'mb-1');
 
@@ -163,22 +167,22 @@ function createForm(latitude, longitude) {
     longitudeCol.appendChild(longitudeLabel);
     longitudeCol.appendChild(longitudeInput);
 
-    var addCol = document.createElement('div');
-    addCol.classList.add('col-md-12', 'mb-2');
+    var editCol = document.createElement('div');
+    editCol.classList.add('col-md-12', 'mb-2');
 
-    var addButton = document.createElement('button');
-    addButton.type = 'button';
-    addButton.classList.add('btn', 'btn-success', 'form-control');
-    addButton.textContent = 'Add Location';
-    addButton.addEventListener('click', function () {
-        addCity(latitude, longitude);
+    var editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.classList.add('btn', 'btn-success', 'form-control');
+    editButton.textContent = 'Update Location';
+    editButton.addEventListener('click', function () {
+        editCity(latitude, longitude, city_id);
     });
 
-    addCol.appendChild(addButton);
+    editCol.appendChild(editButton);
 
     formRow.appendChild(latitudeCol);
     formRow.appendChild(longitudeCol);
-    formRow.appendChild(addCol);
+    formRow.appendChild(editCol);
 
     form.appendChild(formRow);
 
