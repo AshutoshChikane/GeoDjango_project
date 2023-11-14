@@ -15,6 +15,17 @@ class MapViewTest(TestCase):
     def test_get_map_view(self):
         response = self.client.get('/geo_django_map/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_get_add_view(self):
+        response = self.client.get('/geo_django_map/add-point')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_update_view(self):
+        response = self.client.get('/geo_django_map/update-point')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_delete_view(self):
+        response = self.client.get('/geo_django_map/delete-point')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_save_invalid_location(self):
         response = fetch_data_national_weather_service(-1000, 2000)

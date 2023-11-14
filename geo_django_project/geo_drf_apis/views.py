@@ -20,11 +20,11 @@ class AddPointView(APIView):
             if longitude is not None and latitude is not None:
                 latitude = float(latitude)
                 longitude = float(longitude)
-                url = f"https://api.weather.gov/points/{longitude},{latitude}"
+                url = f"https://api.weather.gov/points/{latitude},{longitude}"
                 response_url = requests.get(url)
                 if response_url.status_code == 200:
                     new_instance = Location(
-                        point=Point(x=latitude, y=longitude)
+                        point=Point(x=longitude, y=latitude)
                     )
                     new_instance.save()
                     response_data = {'detail': "Location created successfully"}
@@ -39,7 +39,7 @@ class AddPointView(APIView):
                 response_data = {'detail': "Enter Proper Coordinates"}
                 return Response(response_data, status.HTTP_400_BAD_REQUEST)
         except (IntegrityError, DjIntegrityError, UniqueViolation) as e:
-            response_data = {f'detail-{type(e)}': "Location already exist"}
+            response_data = {f'detail': "Location already exist"}
             return Response(response_data, status.HTTP_400_BAD_REQUEST)
 
         except Exception as exp:
@@ -74,12 +74,12 @@ class UpdatePointView(APIView):
             if latitude is not None and longitude is not None:
                 latitude = float(latitude)
                 longitude = float(longitude)
-                url = f"https://api.weather.gov/points/{longitude},{latitude}"
+                url = f"https://api.weather.gov/points/{latitude},{longitude}"
                 response_url = requests.get(url)
                 if response_url.status_code == 200:
                     instance = Location.objects.get(id=id)
-                    instance.point.x = latitude
-                    instance.point.y = longitude
+                    instance.point.x = longitude
+                    instance.point.y = latitude
                     instance.city = ""
                     instance.gridx = 0
                     instance.gridy = 0

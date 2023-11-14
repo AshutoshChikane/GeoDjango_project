@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
 
 class Location(models.Model):
-    city = models.CharField(max_length=300, blank=True, default="")
+    city = models.CharField(max_length=300, blank=True, default="", unique=True)
     point = PointField(unique=True)
     gridx = models.IntegerField(default=0)
     gridy = models.IntegerField(default=0)
@@ -45,22 +45,19 @@ class Location(models.Model):
 
     @property
     def lat_lng_data(self):
-        try:
-            return {
-                self.id: {
-                    "lat_lng": [self.point.y, self.point.x],
-                    "city":self.city,
-                    "gridX":self.gridx,
-                    "gridY":self.gridy,
-                    "gridId":self.gridId
-                }
+        return {
+            self.id: {
+                "lat_lng": [self.point.y, self.point.x],
+                "city":self.city,
+                "gridX":self.gridx,
+                "gridY":self.gridy,
+                "gridId":self.gridId
             }
-        except Exception:
-            return None
+        }
 
 
-def fetch_data_national_weather_service(latitude, longitude):
-    url = f"https://api.weather.gov/points/{longitude},{latitude}"
+def fetch_data_national_weather_service(longitude, latitude):
+    url = f"https://api.weather.gov/points/{latitude},{longitude}"
     response = requests.get(url)
     if response.status_code == 200:
         response = response.json().get("properties",None)
