@@ -13,10 +13,10 @@ step to follow to run project
 http://127.0.0.1:8000/geo_django_map/ MAP view
 
 
-DRF APIs are render in geo_drf_apis APP
-MAP-UI view are render in geo_map_app APP
+1. DRF APIs are render in geo_drf_apis APP
+2. MAP-UI view are render in geo_map_app APP
 
 Inside MAP UI 
-POST drf API is used to store new location
-PUT drf API is used for updating location
-DELETE drf API is used to delete location
+1. POST drf API is used to store new location
+2. PUT drf API is used for updating location
+3. DELETE drf API is used to delete location
